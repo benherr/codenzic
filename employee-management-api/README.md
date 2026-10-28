@@ -21,9 +21,7 @@ A complete **Employee Management REST API** built with **Java 17 + Spring Boot 3
 | View an employee by ID | `GET /api/v1/employees/{id}` → `200 OK`, `404` when missing |
 | Update employee details | `PUT /api/v1/employees/{id}` → `200 OK`, full replacement |
 | Delete an employee | `DELETE /api/v1/employees/{id}` → `204 No Content` |
-| Input validation | Jakarta Bean Validation on the request DTO → `400` with per-field messages |
-| Proper exception handling | `@RestControllerAdvice` → one consistent error envelope for 400/404/409/500 |
-| MySQL integration | Spring Data JPA + Hibernate, schema auto-created, unique email constraint |
+
 
 **Employee fields:** `firstName`, `lastName`, `email`, `department`, `position`, `salary`.
 
@@ -176,7 +174,7 @@ The `UNIQUE` constraint on `email` is the real guard against duplicates — the 
 
 ```bash
 # 1. clone
-git clone <your-repo-url>
+git clone <repo-url>
 cd employee-management-api
 
 # 2. create the database
@@ -465,28 +463,4 @@ while the full stack trace is written to the server log.
    ```
 4. Click **… → Run collection** → all requests should pass.
 
----
 
-
-
-- **DTOs instead of exposing the entity.** Prevents mass assignment (`id` cannot be injected), keeps the JSON contract independent of the schema, and puts validation on the input model rather than the persistence model.
-- **Service interface + implementation.** The controller depends on the abstraction, which makes unit testing with Mockito trivial and allows alternative implementations.
-- **Validation on the DTO, not the entity.** The entity represents persisted state; the DTO represents what a client is allowed to send.
-- **Email uniqueness enforced twice.** A service-level check produces a clean `409` message; the database `UNIQUE` constraint is the actual guarantee under concurrency, and `DataIntegrityViolationException` maps to the same `409`.
-- **One error envelope.** Clients parse a single structure for every failure, and a `fieldErrors` map is present only for validation errors.
-- **Pagination envelope (`PageResponse`)** instead of serialising Spring's `Page`, whose JSON shape is an implementation detail that changes between versions.
-- **Constructor injection** everywhere — no field injection, dependencies are explicit and the classes are testable.
-- **No Lombok.** DTOs are Java records (immutable, concise); the entity keeps explicit accessors so the project compiles in any IDE without annotation processor setup.
-- **`@Transactional(readOnly = true)` at class level**, overridden on write methods, so read paths avoid unnecessary dirty checking.
-- **`ddl-auto: update` for this assessment**, with `validate` + Flyway/Liquibase named as the production alternative.
-
----
-
-
-
-- `PATCH /employees/{id}` for partial updates
-- separate `Department` entity with a JPA relationship
-- optimistic locking with `@Version`
-- Spring Security with role-based access
-- Actuator health/metrics endpoints
-- Testcontainers-based MySQL integration test
