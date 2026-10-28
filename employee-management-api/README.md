@@ -27,6 +27,21 @@ A complete **Employee Management REST API** built with **Java 17 + Spring Boot 3
 
 ---
 
+## screenshots
+
+## Post
+
+<img src="https://github.com/benherr/codenzic/blob/main/employee-management-api/imgs/post.png">
+
+## Get
+<img src="https://github.com/benherr/codenzic/blob/main/employee-management-api/imgs/get.png">
+
+## Database
+
+<img src="https://github.com/benherr/codenzic/blob/main/employee-management-api/imgs/dbsql.png">
+
+---
+
 ## 2. Architecture
 
 ```
