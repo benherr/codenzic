@@ -1,0 +1,44 @@
+# ======================================================================
+# Default profile: MySQL 8
+# ======================================================================
+server:
+  port: 8080
+
+spring:
+  application:
+    name: employee-management
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/employee_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      pool-name: employee-pool
+
+  jpa:
+    hibernate:
+      ddl-auto: update         
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+       
+        auto_quote_keyword: true
+    show-sql: true
+
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false   
+# Swagger UI:          http://localhost:8080/swagger-ui.html
+# OpenAPI JSON:        http://localhost:8080/v3/api-docs
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
+logging:
+  level:
+    com.example.employeemanagement: INFO
